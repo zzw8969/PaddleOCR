@@ -1,12 +1,12 @@
 Global:
-  use_gpu: true
-  epoch_num: 100
+  use_gpu: false
+  epoch_num: 1000
   log_smooth_window: 20
   print_batch_step: 10
   save_model_dir: ./output/cls/mv3/
   save_epoch_step: 3
   # evaluation is run every 5000 iterations after the 4000th iteration
-  eval_batch_step: [0, 1000]
+  eval_batch_step: [0, 400]
   cal_metric_during_train: True
   pretrained_model:
   checkpoints:
@@ -52,9 +52,9 @@ Metric:
 Train:
   dataset:
     name: SimpleDataSet
-    data_dir: ./train_data/cls
+    data_dir: ./train_data/shuibiao/cls/train
     label_file_list:
-      - ./train_data/cls/train.txt
+      - ./train_data/shuibiao/cls/cls_gt_train.txt
     transforms:
       - DecodeImage: # load image
           img_mode: BGR
@@ -75,9 +75,9 @@ Train:
 Eval:
   dataset:
     name: SimpleDataSet
-    data_dir: ./train_data/cls
+    data_dir: ./train_data/shuibiao/cls/test
     label_file_list:
-      - ./train_data/cls/test.txt
+      - ./train_data/shuibiao/cls/cls_gt_test.txt
     transforms:
       - DecodeImage: # load image
           img_mode: BGR

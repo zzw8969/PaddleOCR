@@ -6,10 +6,10 @@ import logging
 logging.getLogger().setLevel(logging.INFO)
 
 # Configurations
-det_model_dir = 'ch_PP-OCRv3_det_infer'
-cls_model_dir = 'ch_ppocr_mobile_v2.0_cls_infer'
-rec_model_dir = 'ch_PP-OCRv3_rec_infer'
-rec_label_file = 'ppocr_keys_v1.txt'
+det_model_dir = './output/det_db_inference1/'
+cls_model_dir = './output/cls_inference/'
+rec_model_dir = './inference/en_shuibiao-OCRv4_rec/'
+rec_label_file = 'shuibiao_dict.txt'
 device = 'cpu'
 # backend: ['paddle', 'trt'], you can also use other backends, but need to modify
 # the runtime option below

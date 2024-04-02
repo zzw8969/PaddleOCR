@@ -665,6 +665,7 @@ class PaddleOCR(predict_system.TextSystem):
                 tmp_res = [[box.tolist(), res]
                            for box, res in zip(dt_boxes, rec_res)]
                 ocr_res.append(tmp_res)
+            print('ocr_res:*********************')
             return ocr_res
         elif det and not rec:
             ocr_res = []

@@ -1,0 +1,103 @@
+Global:
+  use_gpu: false
+  epoch_num: 500
+  log_smooth_window: 20
+  print_batch_step: 10
+  save_model_dir: ./output/rec/ic15/
+  save_epoch_step: 3
+  # evaluation is run every 2000 iterations
+  eval_batch_step: [0, 100]
+  cal_metric_during_train: True
+  #  pretrain_weights: ./models/ch_rec_r34_vd_crnn/best_accuracy
+  pretrain_weights: ./pretrain_models/rec_mv3_none_bilstm_ctc/best_accuracy
+  #  pretrain_weights: ./output/rec_CRNN/iter_epoch_900
+  #  pretrain_weights: ./models/rec_r50fpn_vd_none_srn/best_accuracy
+  checkpoints:
+  save_inference_dir: ./
+  use_visualdl: False
+  infer_img: doc/imgs_words_en/word_10.png
+  # for data or label process
+#  character_dict_path: ppocr/utils/en_dict.txt
+  character_dict_path: ./ppocr/utils/shuibiao_dict.txt
+  max_text_length: 25
+  infer_mode: False
+  use_space_char: False
+  save_res_path: ./output/rec/predicts_shuibiao.txt
+
+Optimizer:
+  name: Adam
+  beta1: 0.9
+  beta2: 0.999
+  lr:
+    learning_rate: 0.0005
+  regularizer:
+    name: 'L2'
+    factor: 0
+
+Architecture:
+  model_type: rec
+  algorithm: CRNN
+  Transform:
+  Backbone:
+    name: MobileNetV3
+    scale: 0.5
+    model_name: large
+  Neck:
+    name: SequenceEncoder
+    encoder_type: rnn
+    hidden_size: 96
+  Head:
+    name: CTCHead
+    fc_decay: 0
+
+Loss:
+  name: CTCLoss
+
+PostProcess:
+  name: CTCLabelDecode
+
+Metric:
+  name: RecMetric
+  main_indicator: acc
+
+Train:
+  dataset:
+    name: SimpleDataSet
+    data_dir: ./train_data/shuibiao/
+    label_file_list: ["./train_data/shuibiao/rec_gt_train.txt"]
+    transforms:
+      - DecodeImage: # load image
+          img_mode: BGR
+          channel_first: False
+      - CTCLabelEncode: # Class handling label
+      - RecResizeImg:
+          image_shape: [3, 32, 100]
+      - KeepKeys:
+          keep_keys: ['image', 'label', 'length'] # dataloader will return list in this order
+  loader:
+    shuffle: True
+    batch_size_per_card: 256
+    drop_last: True
+    num_workers: 8
+    use_shared_memory: False
+
+Eval:
+  dataset:
+    name: SimpleDataSet
+    data_dir: ./train_data/shuibiao
+    label_file_list: ["./train_data/shuibiao/rec_gt_test.txt"]
+    transforms:
+      - DecodeImage: # load image
+          img_mode: BGR
+          channel_first: False
+      - CTCLabelEncode: # Class handling label
+      - RecResizeImg:
+          image_shape: [3, 32, 100]
+      - KeepKeys:
+          keep_keys: ['image', 'label', 'length'] # dataloader will return list in this order
+  loader:
+    shuffle: False
+    drop_last: False
+    batch_size_per_card: 256
+    num_workers: 4
+    use_shared_memory: False

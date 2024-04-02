@@ -247,6 +247,7 @@ class TextDetector(object):
             for output_tensor in self.output_tensors:
                 output = output_tensor.copy_to_cpu()
                 outputs.append(output)
+
             if self.args.benchmark:
                 self.autolog.times.stamp()
 
@@ -271,6 +272,7 @@ class TextDetector(object):
             raise NotImplementedError
 
         post_result = self.postprocess_op(preds, shape_list)
+        print("post_result: ", post_result)
         dt_boxes = post_result[0]['points']
 
         if self.args.det_box_type == 'poly':
