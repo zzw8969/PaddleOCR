@@ -1,0 +1,4 @@
+python tools/export_model.py -c configs/det/det_mv3_db.yml -o Global.pretrained_model="./output/db_mv3/0905/model" Global.save_inference_dir="./output/det_db_inference2/"
+
+python tools/infer/predict_system.py --image_dir="./doc/imgs/000208.jpg" --det_model_dir="./output/det_db_inference2/" --cls_model_dir="./output/cls_inference/" --rec_model_dir="./inference/en_shuibiao-
+OCRv4_rec/" --use_angle_cls=true --rec_char_dict_path="ppocr/utils/shuibiao_dict.txt"
